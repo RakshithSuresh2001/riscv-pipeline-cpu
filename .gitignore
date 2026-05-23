@@ -1,0 +1,4 @@
+obj_dir/
+waves.vcd
+*.vcd
+*.fst

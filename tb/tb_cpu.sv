@@ -88,10 +88,38 @@ clk  = 0;
         imem[35] = 32'h00000013; // nop
         imem[36] = 32'h00000013; // nop
 
+        // Group 8: Branch Taken (BEQ x30,x30 always taken)
+        imem[37] = 32'h00500f13; // addi x30, x0, 5
+        imem[38] = 32'h01ef0463; // beq  x30, x30, +8  -> taken, skip imem[39]
+        imem[39] = 32'hdeadc0de; // should be skipped
+        imem[40] = 32'h02900f93; // addi x31, x0, 41   -> executes
+
+        // Group 9: LUI + AUIPC
+        imem[41] = 32'h000015b7; // lui  x11, 1        -> x11 = 0x00001000
+        imem[42] = 32'h00000013; // nop
+
+        // Group 10: SLTU (use x8, x9, x10, x29)
+        imem[43] = 32'hfff00413; // addi x8,  x0, -1   -> 0xFFFFFFFF
+        imem[44] = 32'h00100493; // addi x9,  x0, 1
+        imem[45] = 32'h00943533; // sltu x11, x8,  x9  -> 0  (reuse x11 — lui already done)
+        imem[46] = 32'h0084beb3; // sltu x12, x9,  x8  -> 1  (reuse x12)
+
+        // Group 11: BLT taken (use x29, x30, x10)
+        imem[47] = 32'hffd00413; // addi x29, x0, -3
+        imem[48] = 32'h00200493; // addi x9, x0, 2
+        imem[49] = 32'h00944463; // blt  x29, x30, +12 -> taken (skip imem[50])
+        imem[50] = 32'hdeadc0de; // skipped
+        imem[51] = 32'h00500f13; // addi x30, x0, 5    -> executes
+
+        imem[52] = 32'h00000013; // nop
+        imem[53] = 32'h00000013; // nop
+        imem[54] = 32'h00000013; // nop
+        imem[55] = 32'h00000013; // nop
+
         rst_n = 0;
         repeat(2)   @(posedge clk);
         rst_n = 1;
-        repeat(120) @(posedge clk);
+        repeat(200) @(posedge clk);
 
         $display("\n=== RV32I Pipeline Test Results ===");
 
@@ -130,6 +158,19 @@ clk  = 0;
         `CHECK("x26 (skipped)", dut.u_regfile.regs[26], 0)
         `CHECK("x28 (jal ra)", dut.u_regfile.regs[28], 32'h74)
         `CHECK("x27 (post-jal)",dut.u_regfile.regs[27], 42)
+
+        $display("\n-- Group 8: Branch Taken --");
+        `CHECK("x31 (post-branch)", dut.u_regfile.regs[31], 41)
+
+        $display("\n-- Group 9: LUI --");
+        `CHECK("x11 (lui 1)", dut.u_regfile.regs[11], 32'h00001000)
+
+        $display("\n-- Group 10: SLTU --");
+        `CHECK("x10 (sltu -1<1=0)", dut.u_regfile.regs[10], 0)
+        `CHECK("x29 (sltu 1<-1=1)", dut.u_regfile.regs[29], 1)
+
+        $display("\n-- Group 11: BLT Taken --");
+        `CHECK("x30 (post-blt)", dut.u_regfile.regs[30], 5)
 
         $display("\n=== Total: %0d PASS, %0d FAIL ===\n", pass, fail);
         $finish;

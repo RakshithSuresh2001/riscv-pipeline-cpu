@@ -1,0 +1,9 @@
+# running in hazard/src/
+read -formal -sv hazard_formal.sv
+read -formal -sv /home/zair/riscv-cpu/rtl/hazard.sv
+prep -top hazard_formal
+
+hierarchy -smtcheck
+rename -witness
+write_jny -no-connections ../model/design.json
+write_rtlil ../model/design.il

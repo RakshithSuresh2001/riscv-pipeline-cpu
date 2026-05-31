@@ -1,0 +1,15 @@
+[options]
+mode bmc
+depth 20
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -sv hazard_formal.sv
+read -formal -sv /home/zair/riscv-cpu/rtl/hazard.sv
+prep -top hazard_formal
+
+[files]
+hazard_formal.sv
+/home/zair/riscv-cpu/rtl/hazard.sv

@@ -1,0 +1,309 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2024  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.44+39 (git sha1 4cddc1999, clang++ 14.0.0-1ubuntu1.1 -fPIC -O3)
+
+-- Executing script file `../model/design.ys' --
+
+1. Executing Verilog-2005 frontend: hazard_formal.sv
+Parsing formal SystemVerilog input from `hazard_formal.sv' to AST representation.
+Storing AST representation for module `$abstract\hazard_formal'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: /home/zair/riscv-cpu/rtl/hazard.sv
+Parsing formal SystemVerilog input from `/home/zair/riscv-cpu/rtl/hazard.sv' to AST representation.
+Storing AST representation for module `$abstract\hazard'.
+Successfully finished Verilog frontend.
+
+3. Executing PREP pass.
+
+3.1. Executing HIERARCHY pass (managing design hierarchy).
+
+3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\hazard_formal'.
+Generating RTLIL representation for module `\hazard_formal'.
+
+3.2.1. Analyzing design hierarchy..
+Top module:  \hazard_formal
+
+3.2.2. Executing AST frontend in derive mode using pre-parsed AST for module `\hazard'.
+Generating RTLIL representation for module `\hazard'.
+
+3.2.3. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+
+3.2.4. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+Removing unused module `$abstract\hazard'.
+Removing unused module `$abstract\hazard_formal'.
+Removed 2 unused modules.
+Module hazard_formal directly or indirectly contains formal properties -> setting "keep" attribute.
+
+3.3. Executing PROC pass (convert processes to netlists).
+
+3.3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+3.3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+3.3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 0 assignments to connections.
+
+3.3.4. Executing PROC_INIT pass (extract init attributes).
+
+3.3.5. Executing PROC_ARST pass (detect async resets in processes).
+
+3.3.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~9 debug messages>
+
+3.3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\hazard_formal.$proc$hazard_formal.sv:34$1'.
+     1/9: \a_no_fwd_to_x0_memwb_EN
+     2/9: \a_no_fwd_to_x0_exmem_EN
+     3/9: \a_stall_only_on_load_use_EN
+     4/9: \a_memwb_fwd_rs2_valid_EN
+     5/9: \a_memwb_fwd_rs1_valid_EN
+     6/9: \a_exmem_fwd_rs2_valid_EN
+     7/9: \a_exmem_fwd_rs1_valid_EN
+     8/9: \a_no_fwd_x0_rs2_EN
+     9/9: \a_no_fwd_x0_rs1_EN
+
+3.3.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+3.3.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+3.3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 9 empty switches in `\hazard_formal.$proc$hazard_formal.sv:34$1'.
+Removing empty process `hazard_formal.$proc$hazard_formal.sv:34$1'.
+Cleaned up 9 empty switches.
+
+3.3.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+<suppressed ~4 debug messages>
+Optimizing module hazard_formal.
+<suppressed ~6 debug messages>
+
+3.4. Executing FUTURE pass.
+
+3.5. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+Optimizing module hazard_formal.
+
+3.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \hazard..
+Finding unused cells or wires in module \hazard_formal..
+Removed 0 unused cells and 21 unused wires.
+<suppressed ~2 debug messages>
+
+3.7. Executing CHECK pass (checking for obvious problems).
+Checking module hazard...
+Checking module hazard_formal...
+Found and reported 0 problems.
+
+3.8. Executing OPT pass (performing simple optimizations).
+
+3.8.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+Optimizing module hazard_formal.
+
+3.8.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\hazard'.
+<suppressed ~12 debug messages>
+Finding identical cells in module `\hazard_formal'.
+<suppressed ~6 debug messages>
+Removed a total of 6 cells.
+
+3.8.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \hazard..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \hazard_formal..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~11 debug messages>
+
+3.8.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \hazard.
+  Optimizing cells in module \hazard_formal.
+Performed a total of 0 changes.
+
+3.8.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\hazard'.
+Finding identical cells in module `\hazard_formal'.
+<suppressed ~6 debug messages>
+Removed a total of 2 cells.
+
+3.8.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \hazard..
+Finding unused cells or wires in module \hazard_formal..
+Removed 0 unused cells and 6 unused wires.
+<suppressed ~2 debug messages>
+
+3.8.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+Optimizing module hazard_formal.
+
+3.8.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+3.8.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \hazard..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \hazard_formal..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~9 debug messages>
+
+3.8.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \hazard.
+  Optimizing cells in module \hazard_formal.
+Performed a total of 0 changes.
+
+3.8.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\hazard'.
+Finding identical cells in module `\hazard_formal'.
+Removed a total of 0 cells.
+
+3.8.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \hazard..
+Finding unused cells or wires in module \hazard_formal..
+
+3.8.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+Optimizing module hazard_formal.
+
+3.8.14. Finished OPT passes. (There is nothing left to do.)
+
+3.9. Executing WREDUCE pass (reducing word size of cells).
+Removed top 1 bits (of 2) from mux cell hazard.$ternary$/home/zair/riscv-cpu/rtl/hazard.sv:32$26 ($mux).
+Removed top 1 bits (of 2) from mux cell hazard.$ternary$/home/zair/riscv-cpu/rtl/hazard.sv:38$36 ($mux).
+Removed top 1 bits (of 2) from wire hazard.$ternary$/home/zair/riscv-cpu/rtl/hazard.sv:32$26_Y.
+Removed top 1 bits (of 2) from wire hazard.$ternary$/home/zair/riscv-cpu/rtl/hazard.sv:38$36_Y.
+Removed top 1 bits (of 2) from port B of cell hazard_formal.$eq$hazard_formal.sv:44$8 ($eq).
+Removed top 1 bits (of 2) from port B of cell hazard_formal.$eq$hazard_formal.sv:45$9 ($eq).
+
+3.10. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \hazard..
+Finding unused cells or wires in module \hazard_formal..
+Removed 0 unused cells and 2 unused wires.
+<suppressed ~1 debug messages>
+
+3.11. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+3.12. Executing OPT pass (performing simple optimizations).
+
+3.12.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module hazard.
+Optimizing module hazard_formal.
+
+3.12.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\hazard'.
+Finding identical cells in module `\hazard_formal'.
+Removed a total of 0 cells.
+
+3.12.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \hazard..
+Finding unused cells or wires in module \hazard_formal..
+
+3.12.4. Finished fast OPT passes.
+
+3.13. Printing statistics.
+
+=== hazard ===
+
+   Number of wires:                 28
+   Number of wire bits:             52
+   Number of public wires:          11
+   Number of public wire bits:      33
+   Number of ports:                 11
+   Number of port bits:             33
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 20
+     $eq                             6
+     $logic_and                      7
+     $logic_or                       1
+     $mux                            4
+     $reduce_bool                    2
+
+=== hazard_formal ===
+
+   Number of wires:                 32
+   Number of wire bits:             54
+   Number of public wires:          22
+   Number of public wire bits:      44
+   Number of ports:                 10
+   Number of port bits:             30
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 27
+     $check                          9
+     $eq                             4
+     $mux                            7
+     $reduce_bool                    6
+     hazard                          1
+
+=== design hierarchy ===
+
+   hazard_formal                     1
+     hazard                          1
+
+   Number of wires:                 60
+   Number of wire bits:            106
+   Number of public wires:          33
+   Number of public wire bits:      77
+   Number of ports:                 21
+   Number of port bits:             63
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 46
+     $check                          9
+     $eq                            10
+     $logic_and                      7
+     $logic_or                       1
+     $mux                           11
+     $reduce_bool                    8
+
+3.14. Executing CHECK pass (checking for obvious problems).
+Checking module hazard...
+Checking module hazard_formal...
+Found and reported 0 problems.
+
+4. Executing HIERARCHY pass (managing design hierarchy).
+
+4.1. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+
+4.2. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+Removed 0 unused modules.
+Module hazard_formal directly or indirectly contains formal properties -> setting "keep" attribute.
+
+5. Executing jny backend.
+
+6. Executing RTLIL backend.
+Output filename: ../model/design.il
+
+End of script. Logfile hash: ebf466cfad, CPU: user 0.02s system 0.00s, MEM: 16.77 MB peak
+Yosys 0.44+39 (git sha1 4cddc1999, clang++ 14.0.0-1ubuntu1.1 -fPIC -O3)
+Time spent: 23% 5x opt_clean (0 sec), 22% 6x opt_expr (0 sec), ...

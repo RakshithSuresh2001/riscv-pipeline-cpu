@@ -1,0 +1,100 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2024  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.44+39 (git sha1 4cddc1999, clang++ 14.0.0-1ubuntu1.1 -fPIC -O3)
+
+-- Executing script file `design_smt2.ys' --
+
+1. Executing RTLIL frontend.
+Input filename: design_prep.il
+
+2. Executing HIERARCHY pass (managing design hierarchy).
+
+2.1. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+
+2.2. Analyzing design hierarchy..
+Top module:  \hazard_formal
+Used module:     \hazard
+Removed 0 unused modules.
+Module hazard_formal directly or indirectly contains formal properties -> setting "keep" attribute.
+
+3. Executing FORMALFF pass.
+
+4. Executing DFFUNMAP pass (unmap clock enable and synchronous reset from FFs).
+
+5. Printing statistics.
+
+=== hazard_formal ===
+
+   Number of wires:                 32
+   Number of wire bits:             54
+   Number of public wires:          22
+   Number of public wire bits:      44
+   Number of ports:                 10
+   Number of port bits:             30
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 27
+     $assert                         9
+     $eq                             4
+     $mux                            7
+     $reduce_bool                    6
+     hazard                          1
+
+=== hazard ===
+
+   Number of wires:                 28
+   Number of wire bits:             52
+   Number of public wires:          11
+   Number of public wire bits:      33
+   Number of ports:                 11
+   Number of port bits:             33
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 20
+     $eq                             6
+     $logic_and                      7
+     $logic_or                       1
+     $mux                            4
+     $reduce_bool                    2
+
+=== design hierarchy ===
+
+   hazard_formal                     1
+     hazard                          1
+
+   Number of wires:                 60
+   Number of wire bits:            106
+   Number of public wires:          33
+   Number of public wire bits:      77
+   Number of ports:                 21
+   Number of port bits:             63
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 46
+     $assert                         9
+     $eq                            10
+     $logic_and                      7
+     $logic_or                       1
+     $mux                           11
+     $reduce_bool                    8
+
+6. Executing SMT2 backend.
+
+6.1. Executing BMUXMAP pass.
+
+6.2. Executing DEMUXMAP pass.
+Creating SMT-LIBv2 representation of module hazard.
+Creating SMT-LIBv2 representation of module hazard_formal.
+
+End of script. Logfile hash: 875a6aab27, CPU: user 0.00s system 0.01s, MEM: 16.78 MB peak
+Yosys 0.44+39 (git sha1 4cddc1999, clang++ 14.0.0-1ubuntu1.1 -fPIC -O3)
+Time spent: 63% 2x write_smt2 (0 sec), 25% 2x read_rtlil (0 sec), ...

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-05-30T23:18:31" hostname="MSI" package="hazard" id="0" name="default" tests="9" errors="0" failures="0" time="0" skipped="0">
+<properties>
+<property name="os" value="Linux"/>
+<property name="expect" value="PASS"/>
+<property name="status" value="PASS"/>
+</properties>
+<testcase classname="default" name="build execution" time="0">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:40.35-40.83" time="0" type="ASSERT" location="hazard_formal.sv:40.35-40.83" id="a_exmem_fwd_rs1_valid">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:41.35-41.83" time="0" type="ASSERT" location="hazard_formal.sv:41.35-41.83" id="a_exmem_fwd_rs2_valid">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:44.35-44.83" time="0" type="ASSERT" location="hazard_formal.sv:44.35-44.83" id="a_memwb_fwd_rs1_valid">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:45.35-45.83" time="0" type="ASSERT" location="hazard_formal.sv:45.35-45.83" id="a_memwb_fwd_rs2_valid">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:51.35-51.88" time="0" type="ASSERT" location="hazard_formal.sv:51.35-51.88" id="a_no_fwd_to_x0_exmem">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:52.35-52.88" time="0" type="ASSERT" location="hazard_formal.sv:52.35-52.88" id="a_no_fwd_to_x0_memwb">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:36.35-36.80" time="0" type="ASSERT" location="hazard_formal.sv:36.35-36.80" id="a_no_fwd_x0_rs1">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:37.35-37.80" time="0" type="ASSERT" location="hazard_formal.sv:37.35-37.80" id="a_no_fwd_x0_rs2">
+</testcase>
+<testcase classname="default" name="Property ASSERT in hazard_formal at hazard_formal.sv:48.20-48.66" time="0" type="ASSERT" location="hazard_formal.sv:48.20-48.66" id="a_stall_only_on_load_use">
+</testcase>
+<system-out>SBY 23:18:31 [hazard] Removing directory '/home/zair/riscv-cpu/formal/hazard'.
+SBY 23:18:31 [hazard] Copy '/home/zair/riscv-cpu/formal/hazard_formal.sv' to '/home/zair/riscv-cpu/formal/hazard/src/hazard_formal.sv'.
+SBY 23:18:31 [hazard] Copy '/home/zair/riscv-cpu/rtl/hazard.sv' to '/home/zair/riscv-cpu/formal/hazard/src/hazard.sv'.
+SBY 23:18:31 [hazard] engine_0: smtbmc z3
+SBY 23:18:31 [hazard] base: starting process &quot;cd hazard/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 23:18:31 [hazard] base: finished (returncode=0)
+SBY 23:18:31 [hazard] prep: starting process &quot;cd hazard/model; yosys -ql design_prep.log design_prep.ys&quot;
+SBY 23:18:31 [hazard] prep: finished (returncode=0)
+SBY 23:18:31 [hazard] smt2: starting process &quot;cd hazard/model; yosys -ql design_smt2.log design_smt2.ys&quot;
+SBY 23:18:31 [hazard] smt2: finished (returncode=0)
+SBY 23:18:31 [hazard] engine_0: starting process &quot;cd hazard; yosys-smtbmc -s z3 --presat --noprogress -t 20  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2&quot;
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Solver: z3
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 0..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 0..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 1..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 1..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 2..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 2..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 3..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 3..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 4..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 4..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 5..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 5..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 6..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 6..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 7..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 7..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 8..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 8..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 9..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 9..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 10..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 10..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 11..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 11..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 12..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 12..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 13..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 13..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 14..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 14..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 15..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 15..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 16..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 16..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 17..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 17..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 18..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 18..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assumptions in step 19..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Checking assertions in step 19..
+SBY 23:18:31 [hazard] engine_0: ##   0:00:00  Status: passed
+SBY 23:18:31 [hazard] engine_0: finished (returncode=0)
+SBY 23:18:31 [hazard] engine_0: Status returned by engine: pass
+SBY 23:18:31 [hazard] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 23:18:31 [hazard] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 23:18:31 [hazard] summary: engine_0 (smtbmc z3) returned pass
+SBY 23:18:31 [hazard] summary: engine_0 did not produce any traces
+SBY 23:18:31 [hazard] DONE (PASS, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

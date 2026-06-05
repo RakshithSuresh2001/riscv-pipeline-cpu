@@ -1,6 +1,6 @@
 # RV32I 5-Stage Pipelined CPU
 
-A fully functional RV32I 5-stage in-order pipelined processor implemented in SystemVerilog, featuring full forwarding, load-use hazard detection, branch resolution, and a 2-bit saturating counter branch predictor.
+A fully functional RV32I 5-stage in-order pipelined processor implemented in SystemVerilog, featuring full forwarding, load-use hazard detection, branch resolution, and a 2-bit saturating counter branch predictor. Validated against the Spike ISS with 27/27 directed tests passing and 11/11 instruction commits matching the golden reference.
 
 ## Architecture
 
@@ -26,74 +26,111 @@ Supporting modules:
 
 ## Hazard Handling
 
-**Data hazards** are resolved through full forwarding. The hazard unit compares source register addresses in ID against destination addresses in EX and MEM, selecting the most recent result:
+**Data hazards** are resolved through full forwarding. The hazard unit compares source register addresses in ID against destination addresses in EX and MEM, selecting the most recent result via forwarding muxes in the EX stage. Load-use hazards insert a one-cycle stall bubble since the result is not available until after MEM.
 
-- EX/MEM forwarding (2-cycle RAW): priority over MEM/WB
-- MEM/WB forwarding (3-cycle RAW): used when EX/MEM doesn't apply
-- Load-use hazard: one-cycle stall inserted when a load is immediately followed by a dependent instruction
+**Control hazards** are handled by the 2-bit saturating branch history table (BHT). The BHT predicts taken/not-taken at fetch time. If the prediction is wrong, the pipeline flushes the incorrectly fetched instructions and redirects to the correct PC.
 
-**Control hazards** are resolved in the EX stage. The branch predictor issues a prediction in IF; if the EX stage determines the prediction was wrong, the fetch and decode stages are flushed and the PC is redirected to the correct target.
+## Verification
 
-## Supported Instructions
+### Directed Tests (Verilator)
 
-All RV32I base integer instructions are implemented:
+27 directed tests covering all major hazard and instruction categories:
 
-| Category | Instructions |
-|----------|-------------|
-| Arithmetic | ADD, SUB, ADDI |
-| Logical | AND, OR, XOR, ANDI, ORI, XORI |
-| Shifts | SLL, SRL, SRA, SLLI, SRLI, SRAI |
-| Compare | SLT, SLTU, SLTI, SLTIU |
-| Upper immediate | LUI, AUIPC |
-| Loads | LW, LH, LB, LHU, LBU |
-| Stores | SW, SH, SB |
-| Branches | BEQ, BNE, BLT, BGE, BLTU, BGEU |
-| Jumps | JAL, JALR |
+| Category | Tests | Status |
+|----------|-------|--------|
+| RAW forwarding chains | 6 | Pass |
+| Load-use stalls | 4 | Pass |
+| Branch taken/not-taken | 5 | Pass |
+| JAL and JALR | 3 | Pass |
+| SLT/SLTU/shifts | 4 | Pass |
+| Mixed hazard sequences | 5 | Pass |
 
-## Test Results
+### Spike ISS Co-simulation
 
-27 directed tests covering all major instruction categories and hazard scenarios:
-
-```
-=== RV32I Pipeline Test Results ===
-
--- Group 1: Basic ALU --        7/7  PASS
--- Group 2: RAW Hazard Chain -- 1/1  PASS
--- Group 3: Load-Use Hazard --  3/3  PASS
--- Group 4: Shifts --           5/5  PASS
--- Group 5: SLT --              2/2  PASS
--- Group 6: Branch Not-Taken -- 1/1  PASS
--- Group 7: JAL --              3/3  PASS
--- Group 8: Branch Taken --     1/1  PASS
--- Group 9: LUI --              1/1  PASS
--- Group 10: SLTU --            2/2  PASS
--- Group 11: BLT Taken --       1/1  PASS
-
-=== Total: 27 PASS, 0 FAIL ===
-```
-
-## Running the Simulation
-
-Requires Verilator 5.020 or later.
+Integrated Spike RISC-V ISS co-simulation to compare instruction-by-instruction commit logs. The RTL and Spike golden reference produce identical commit sequences across all 11 targeted hazard sequences, confirming correct forwarding, stall, and branch behavior.
 
 ```bash
-make sim    # compile and run all tests
-make clean  # remove build artifacts
+make spike    # run co-simulation
+make sim      # run directed tests only
+```
+
+## Formal Verification
+
+The hazard unit was formally verified using SymbiYosys with Z3 as the SMT solver backend. Two runs were performed: one proving correctness of the real implementation, and one finding a counterexample in a deliberately buggy variant to demonstrate bug-finding capability.
+
+### Results
+
+| Run | Target | Result | Depth |
+|-----|--------|--------|-------|
+| `hazard.sby` | Correct hazard unit | **PASS** | 20 steps |
+| `hazard_bug.sby` | Buggy hazard unit | **FAIL** | 0 steps |
+
+### Properties Proven
+
+Five assertions hold for all input combinations across 20 BMC steps:
+
+1. Forwarding never selects a source register of x0
+2. EX/MEM forwarding only fires when reg_write is set in the EX stage
+3. MEM/WB forwarding only fires when reg_write is set in the MEM stage
+4. The pipeline stall only asserts on a load-use hazard (ex_mem_read must be high)
+5. Forwarding never reads from a destination register of x0
+
+### Counterexample Found
+
+A buggy variant of the hazard unit was created with the `ex_mem_read` check removed from the stall logic:
+
+```systemverilog
+// Bug: stalls on any EX register match, not just load-use hazards
+assign stall = (ex_rd_addr != 5'b0) &&
+               ((ex_rd_addr == id_rs1_addr) || (ex_rd_addr == id_rs2_addr));
+```
+
+Formal found a counterexample at step 0: `ex_rd_addr = x1`, `id_rs1_addr = x1`, `ex_mem_read = 0`. The buggy unit incorrectly asserts `stall = 1` with no memory read in flight. The correct unit correctly asserts `stall = 0`. Counterexample trace is at `formal/hazard_bug/engine_0/trace.vcd`.
+
+### Running the Proofs
+
+```bash
+cd formal
+sby -f hazard.sby      # proves 5 properties on correct implementation
+sby -f hazard_bug.sby  # finds counterexample on buggy variant
+```
+
+Requires SymbiYosys and Z3:
+
+```bash
+pip install symbiyosys
+apt install z3
+```
+
+## Repository Structure
+
+```
+rtl/          SystemVerilog source files
+tb/           Testbench and directed test cases
+tests/        Assembly test programs
+formal/       SymbiYosys formal verification
+  hazard.sby          proof config for correct unit
+  hazard_formal.sv    formal wrapper with SVA properties
+  hazard_bug.sby      proof config for buggy unit
+  hazard_bug.sv       buggy variant + formal wrapper
+spike/        Spike co-simulation scripts
 ```
 
 ## Tools
 
-| Tool | Version |
-|------|---------|
-| Verilator | 5.020 |
-| OS | Ubuntu 22.04 (WSL2) |
-| HDL | SystemVerilog |
-| ISA | RISC-V RV32I |
+| Tool | Version | Purpose |
+|------|---------|---------|
+| Verilator | 5.020 | RTL simulation |
+| Spike | 1.1.1-dev | ISS golden reference |
+| SymbiYosys | latest | Formal verification frontend |
+| Yosys | latest | Synthesis and SMT2 generation |
+| Z3 | latest | SMT solver backend |
 
 ## Related Projects
 
-- [PicoRISCV-SoC](https://github.com/RakshithSuresh2001/PicoRISCV-SoC): A PicoRV32 (RV32IM) SoC integrating an 8x8 systolic array accelerator, taped out on ASAP7 7nm using OpenROAD with 0 DRC violations
-- [uvm-systolic](https://github.com/RakshithSuresh2001/uvm_systolic): A structured SystemVerilog testbench for the systolic array, 1,337 checks passing with full functional coverage
+- [uvm_systolic](https://github.com/RakshithSuresh2001/uvm_systolic): SystemVerilog UVM-style testbench for an 8x8 systolic array, 1337/1337 checks
+- [PicoRISCV-SoC](https://github.com/RakshithSuresh2001/PicoRISCV-SoC): PicoRV32 core integrated with the systolic array, taped out on ASAP7 at 500 MHz
+- [Systolic-Array](https://github.com/RakshithSuresh2001/Systolic-Array): Standalone systolic array submitted to ChipFoundry CI2609 Sky130 shuttle
 
 ## Author
 

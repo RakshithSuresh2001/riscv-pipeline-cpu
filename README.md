@@ -65,6 +65,8 @@ The hazard unit was formally verified using SymbiYosys with Z3 as the SMT solver
 | `hazard.sby` | Correct hazard unit | **PASS** | 20 steps |
 | `hazard_bug.sby` | Buggy hazard unit | **FAIL** | 0 steps |
 
+<img width="949" height="323" alt="Screenshot 2026-06-04 234809" src="https://github.com/user-attachments/assets/70b5257a-9318-4967-abac-be351041016f" />
+
 ### Properties Proven
 
 Five assertions hold for all input combinations across 20 BMC steps:
@@ -84,6 +86,9 @@ A buggy variant of the hazard unit was created with the `ex_mem_read` check remo
 assign stall = (ex_rd_addr != 5'b0) &&
                ((ex_rd_addr == id_rs1_addr) || (ex_rd_addr == id_rs2_addr));
 ```
+
+<img width="890" height="180" alt="Screenshot 2026-06-04 234627" src="https://github.com/user-attachments/assets/1b28dc92-9ab1-4e0d-ae45-774600aed97b" />
+
 
 Formal found a counterexample at step 0: `ex_rd_addr = x1`, `id_rs1_addr = x1`, `ex_mem_read = 0`. The buggy unit incorrectly asserts `stall = 1` with no memory read in flight. The correct unit correctly asserts `stall = 0`. Counterexample trace is at `formal/hazard_bug/engine_0/trace.vcd`.
 

@@ -1,0 +1,13 @@
+[options]
+mode bmc
+depth 5
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal hazard_bug.sv
+prep -top hazard_bug_formal
+
+[files]
+hazard_bug.sv

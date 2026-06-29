@@ -65,6 +65,8 @@ The one discrepancy (x26 (skipped)) is a simulator initialization difference, no
 
 All 26 other checks, covering ALU operations, RAW hazard forwarding, load-use stall detection, shifts, SLT/SLTU, branches (taken and not-taken), JAL, and LUI, passed identically across both simulators, confirming the pipeline's functional logic itself is simulator-independent. The single discrepancy is a register file reset gap exposed by cross-simulator testing, exactly the kind of issue that staying on one open-source simulator can hide indefinitely.
 
+<img width="1872" height="898" alt="image" src="https://github.com/user-attachments/assets/37ae64b8-17c0-4eaf-ad85-6fd3b2f65b2d" />
+
 ## Formal Verification
 
 The hazard unit was formally verified using SymbiYosys with Z3 as the SMT solver backend. Two runs were performed: one proving correctness of the real implementation, and one finding a counterexample in a deliberately buggy variant to demonstrate bug-finding capability.

@@ -53,6 +53,17 @@ Integrated Spike RISC-V ISS co-simulation to compare instruction-by-instruction 
 make spike    # run co-simulation
 make sim      # run directed tests only
 ```
+### Simulator Portability Verification (VCS)
+
+Recompiled and reran the directed test suite under Synopsys VCS X-2025.06 on a remote Linux server (USC EE department cluster), independent of the Verilator flow used for development.
+
+<img width="612" height="640" alt="Screenshot 2026-06-29 114313" src="https://github.com/user-attachments/assets/634f33c9-5d74-4b36-9f6b-9b04502972d2" />
+
+Result: 26/27 PASS.
+
+The one discrepancy (x26 (skipped)) is a simulator initialization difference, not a CPU bug. x26 is intentionally never written in this test program (the JAL test confirms the jump correctly skips over instructions targeting it), so the check expects it to remain at its reset value of 0. regfile.sv has no explicit reset or initial block clearing the register array, so an unwritten register's value at time zero is implementation-defined: Verilator defaults uninitialized registers to 0, while VCS defaults them to X (unknown), per standard simulator behavior for declared-but-unset 4-state variables.
+
+All 26 other checks, covering ALU operations, RAW hazard forwarding, load-use stall detection, shifts, SLT/SLTU, branches (taken and not-taken), JAL, and LUI, passed identically across both simulators, confirming the pipeline's functional logic itself is simulator-independent. The single discrepancy is a register file reset gap exposed by cross-simulator testing, exactly the kind of issue that staying on one open-source simulator can hide indefinitely.
 
 ## Formal Verification
 

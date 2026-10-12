@@ -53,6 +53,19 @@ Integrated Spike RISC-V ISS co-simulation to compare instruction-by-instruction 
 make spike    # run co-simulation
 make sim      # run directed tests only
 ```
+### Simulator Portability Verification (VCS)
+
+Recompiled and reran the directed test suite under Synopsys VCS X-2025.06 on a remote Linux server (USC EE department cluster), independent of the Verilator flow used for development.
+
+<img width="612" height="640" alt="Screenshot 2026-06-29 114313" src="https://github.com/user-attachments/assets/634f33c9-5d74-4b36-9f6b-9b04502972d2" />
+
+Result: 26/27 PASS.
+
+The one discrepancy (x26 (skipped)) is a simulator initialization difference, not a CPU bug. x26 is intentionally never written in this test program (the JAL test confirms the jump correctly skips over instructions targeting it), so the check expects it to remain at its reset value of 0. regfile.sv has no explicit reset or initial block clearing the register array, so an unwritten register's value at time zero is implementation-defined: Verilator defaults uninitialized registers to 0, while VCS defaults them to X (unknown), per standard simulator behavior for declared-but-unset 4-state variables.
+
+All 26 other checks, covering ALU operations, RAW hazard forwarding, load-use stall detection, shifts, SLT/SLTU, branches (taken and not-taken), JAL, and LUI, passed identically across both simulators, confirming the pipeline's functional logic itself is simulator-independent. The single discrepancy is a register file reset gap exposed by cross-simulator testing, exactly the kind of issue that staying on one open-source simulator can hide indefinitely.
+
+<img width="1872" height="898" alt="Screenshot 2026-06-29 115008" src="https://github.com/user-attachments/assets/2c876bf5-3904-4b08-a1dc-4140cde8a157" />
 
 ## Formal Verification
 
@@ -64,6 +77,8 @@ The hazard unit was formally verified using SymbiYosys with Z3 as the SMT solver
 |-----|--------|--------|-------|
 | `hazard.sby` | Correct hazard unit | **PASS** | 20 steps |
 | `hazard_bug.sby` | Buggy hazard unit | **FAIL** | 0 steps |
+
+<img width="949" height="323" alt="Screenshot 2026-06-04 234809" src="https://github.com/user-attachments/assets/70b5257a-9318-4967-abac-be351041016f" />
 
 ### Properties Proven
 
@@ -84,6 +99,9 @@ A buggy variant of the hazard unit was created with the `ex_mem_read` check remo
 assign stall = (ex_rd_addr != 5'b0) &&
                ((ex_rd_addr == id_rs1_addr) || (ex_rd_addr == id_rs2_addr));
 ```
+
+<img width="890" height="180" alt="Screenshot 2026-06-04 234627" src="https://github.com/user-attachments/assets/1b28dc92-9ab1-4e0d-ae45-774600aed97b" />
+
 
 Formal found a counterexample at step 0: `ex_rd_addr = x1`, `id_rs1_addr = x1`, `ex_mem_read = 0`. The buggy unit incorrectly asserts `stall = 1` with no memory read in flight. The correct unit correctly asserts `stall = 0`. Counterexample trace is at `formal/hazard_bug/engine_0/trace.vcd`.
 

@@ -129,7 +129,7 @@ spike/        Spike co-simulation scripts
 ## Related Projects
 
 - [uvm_systolic](https://github.com/RakshithSuresh2001/uvm_systolic): SystemVerilog UVM-style testbench for an 8x8 systolic array, 1337/1337 checks
-- [PicoRISCV-SoC](https://github.com/RakshithSuresh2001/PicoRISCV-SoC): PicoRV32 core integrated with the systolic array, taped out on ASAP7 at 500 MHz
+- [PicoRISCV-SoC](https://github.com/RakshithSuresh2001/PicoRISCV-SoC): PicoRV32 core integrated with the systolic array, implemented RTL-to-GDS on ASAP7 at 500 MHz
 - [Systolic-Array](https://github.com/RakshithSuresh2001/Systolic-Array): Standalone systolic array submitted to ChipFoundry CI2609 Sky130 shuttle
 
 ## Author
